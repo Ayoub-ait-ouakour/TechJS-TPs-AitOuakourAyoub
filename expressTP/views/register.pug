@@ -10,10 +10,11 @@ block content
         .bg-red-100.border.border-red-400.text-red-700.px-4.py-3.rounded.mb-4(role="alert")
           p.text-sm= error
       
-      form(method="POST", action="/register")
+      form(method="POST" action="/register")
         .mb-4
           label.block.text-gray-700.text-sm.font-semibold.mb-2(for="username") Username
-          input#username.w-full.px-4.py-2.border.border-gray-300.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500.focus:border-transparent(
+          input#username(
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             type="text"
             name="username"
             placeholder="Enter username"
@@ -22,7 +23,8 @@ block content
         
         .mb-4
           label.block.text-gray-700.text-sm.font-semibold.mb-2(for="email") Email
-          input#email.w-full.px-4.py-2.border.border-gray-300.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500.focus:border-transparent(
+          input#email(
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             type="email"
             name="email"
             placeholder="Enter email"
@@ -31,7 +33,8 @@ block content
         
         .mb-4
           label.block.text-gray-700.text-sm.font-semibold.mb-2(for="password") Password
-          input#password.w-full.px-4.py-2.border.border-gray-300.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500.focus:border-transparent(
+          input#password(
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             type="password"
             name="password"
             placeholder="Enter password"
@@ -40,18 +43,20 @@ block content
         
         .mb-6
           label.block.text-gray-700.text-sm.font-semibold.mb-2(for="confirmPassword") Confirm Password
-          input#confirmPassword.w-full.px-4.py-2.border.border-gray-300.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500.focus:border-transparent(
+          input#confirmPassword(
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             type="password"
             name="confirmPassword"
             placeholder="Confirm password"
             required
           )
         
-        button.w-full.bg-blue-600.hover:bg-blue-700.text-white.font-bold.py-3.px-4.rounded-lg.transition.duration-200(
+        button(
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200"
           type="submit"
         ) Register
       
       .mt-6.text-center
         p.text-gray-600.text-sm
           | Already have an account? 
-          a.text-blue-600.hover:text-blue-800.font-semibold(href="/login") Login here
+          a(class="text-blue-600 hover:text-blue-800 font-semibold" href="/login") Login here

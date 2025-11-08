@@ -2,37 +2,51 @@
 extends layout
 
 block content
-  .min-h-screen.bg-gradient-to-br.from-blue-50.to-indigo-100.py-8.px-4
+  div(class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4")
     .max-w-6xl.mx-auto
-      //- Header
-      .bg-white.rounded-lg.shadow-md.p-6.mb-8.flex.justify-between.items-center
+      div(class="bg-white rounded-lg shadow-md p-6 mb-8 flex justify-between items-center")
         div
           h1.text-3xl.font-bold.text-gray-800 Book Library
           p.text-gray-600.mt-1 Welcome, #{user.username}!
-        a.bg-red-600.hover:bg-red-700.text-white.font-semibold.py-2.px-6.rounded-lg.transition.duration-200(
+        a(
+          class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200"
           href="/logout"
         ) Logout
-      
-      //- Books Grid
-      .grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-3.gap-6
+      - var _idx = (typeof _idx !== 'undefined' ? _idx : 0)
+      div(class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6")
         each book in books
-          .bg-white.rounded-lg.shadow-lg.p-6.hover:shadow-xl.transition.duration-300.transform.hover:-translate-y-1
-            .flex.items-start.justify-between.mb-4
-              .bg-blue-600.text-white.rounded-full.w-12.h-12.flex.items-center.justify-center.font-bold.text-lg
-                = book.id
-              .text-gray-400.text-sm= book.year
+          div(class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-300 transform hover:-translate-y-1")
+            div(class="flex items-start justify-between mb-4")
+              div(class="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg")= _idx++
+              div(class="text-gray-400 text-sm")= book.categorie
             
-            h2.text-xl.font-bold.text-gray-800.mb-2= book.title
+            h2.text-xl.font-bold.text-gray-800.mb-2= book.name
             p.text-gray-600.text-sm.mb-4
               span.font-semibold by 
               = book.author
             
             .border-t.border-gray-200.pt-4
-              .flex.items-center.justify-between
-                span.text-xs.text-gray-500.uppercase.font-semibold Published
-                span.text-sm.font-bold.text-blue-600= book.year
-      
-      //- Empty state (if no books)
-      if books.length === 0
-        .bg-white.rounded-lg.shadow-md.p-12.text-center
-          p.text-gray-600.text-lg No books available at the moment.
+              div(class="flex items-center justify-between")
+                span(class="text-xs text-gray-500 uppercase font-semibold") Published
+                span(class="text-sm font-bold text-blue-600")= book.published ? new Date(book.published).toDateString() : 'Unknown'
+      //- Pagination controls
+      if typeof totalPages !== 'undefined' && totalPages > 1
+        .mt-6.flex.items-center.justify-center.space-x-2
+          //- Previous button
+          if currentPage > 1
+            a(href=`/books?page=${currentPage-1}` class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300") Previous
+          else
+            span(class="px-4 py-2 bg-gray-100 text-gray-400 rounded") Previous
+
+          //- Page numbers
+          - for (var p = 1; p <= totalPages; p++)
+            if p === currentPage
+              span(class="px-3 py-1 bg-blue-600 text-white rounded")= p
+            else
+              a(href=`/books?page=${p}` class="px-3 py-1 bg-white border rounded hover:bg-gray-100")= p
+
+          //- Next button
+          if currentPage < totalPages
+            a(href=`/books?page=${currentPage+1}` class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300") Next
+          else
+            span(class="px-4 py-2 bg-gray-100 text-gray-400 rounded") Next

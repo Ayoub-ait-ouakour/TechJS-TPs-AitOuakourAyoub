@@ -10,14 +10,42 @@ const path = require('path');
 
 const app = express();
 
+
+
 // MongoDB User Model
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
+const bookSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  author: { type: String, required: true },
+  categorie: { type: String, required: true },
+  published: { type: Date, required: true }
+});
 
+const Book = mongoose.model('Book', bookSchema);
 const User = mongoose.model('User', userSchema);
+
+
+// Seed the database on initial connection if collection is empty
+async function seedDatabaseIfEmpty() {
+  try {
+    const count = await Book.countDocuments();
+    if (count === 0) {
+      await Book.insertMany(seedBooks);
+      console.log('Seeded books collection with 20 books.');
+    } else {
+      console.log('Books collection already contains data; skipping seeding.');
+    }
+  } catch (err) {
+    console.error('Error seeding books collection:', err);
+  }
+}
+
+// Run seeding once MongoDB connection opens
+mongoose.connection.once('open', seedDatabaseIfEmpty);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/authapp', {
@@ -34,7 +62,7 @@ app.use(express.json());
 
 // Session configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 3600000 } // 1 hour
@@ -84,14 +112,7 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-// Local books data
-const books = [
-  { id: 1, title: 'To Kill a Mockingbird', author: 'Harper Lee', year: 1960 },
-  { id: 2, title: '1984', author: 'George Orwell', year: 1949 },
-  { id: 3, title: 'Pride and Prejudice', author: 'Jane Austen', year: 1813 },
-  { id: 4, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', year: 1925 },
-  { id: 5, title: 'The Catcher in the Rye', author: 'J.D. Salinger', year: 1951 }
-];
+
 
 // Routes
 app.get('/', (req, res) => {
@@ -163,8 +184,26 @@ app.post('/login', (req, res, next) => {
 });
 
 // Books page (protected)
-app.get('/books', isAuthenticated, (req, res) => {
-  res.render('books', { user: req.user, books });
+app.get('/books', isAuthenticated, async (req, res) => {
+  try {
+    // Pagination params
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = 10; // books per page
+    const skip = (page - 1) * limit;
+
+    const total = await Book.countDocuments();
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+
+    const books = await Book.find()
+      .sort({ published: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.render('books', { user: req.user, books, currentPage: page, totalPages });
+  } catch (err) {
+    console.error('Error fetching books:', err);
+    res.render('books', { user: req.user, books: [], error: 'Failed to load books', currentPage: 1, totalPages: 1 });
+  }
 });
 
 // Logout
@@ -177,7 +216,8 @@ app.get('/logout', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  // console.log(process.env.MONGODB_URI);
 });

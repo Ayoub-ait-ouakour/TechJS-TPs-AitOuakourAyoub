@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Reading Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+
+  <div class="container mx-auto max-w-4xl">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Reading Tracker</h1>
+
+    <form id="add-book-form" class="bg-white p-6 rounded-lg shadow-md mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <h2 class="text-2xl font-semibold col-span-full mb-2">Add a New Book</h2>
+
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+        <input type="text" id="title" name="title" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label for="author" class="block text-sm font-medium text-gray-700">Author</label>
+        <input type="text" id="author" name="author" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label for="pagesTotal" class="block text-sm font-medium text-gray-700">Number of Pages</label>
+        <input type="number" id="pagesTotal" name="pagesTotal" required min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label for="pagesRead" class="block text-sm font-medium text-gray-700">Pages Read</label>
+        <input type="number" id="pagesRead" name="pagesRead" required min="0" value="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+        <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+          <option>Want to read</option>
+          <option>Currently reading</option>
+          <option>Read</option>
+          <option>Re-read</option>
+          <option>DNF</option>
+          <option>Returned Unread</option>
+        </select>
+      </div>
+      <div>
+        <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
+        <select id="format" name="format" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+          <option>Print</option>
+          <option>Ebook</option>
+          <option>PDF</option>
+          <option>AudioBook</option>
+        </select>
+      </div>
+      <div>
+        <label for="price" class="block text-sm font-medium text-gray-700">Price ($)</label>
+        <input type="number" id="price" name="price" min="0" value="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label for="suggestedBy" class="block text-sm font-medium text-gray-700">Suggested By</label>
+        <input type="text" id="suggestedBy" name="suggestedBy" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      </div>
+
+      <button type="submit" class="col-span-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+        Add Book
+      </button>
+    </form>
+
+    <div id="global-stats" class="bg-white p-6 rounded-lg shadow-md mb-8 text-center">
+      <h2 class="text-2xl font-semibold mb-4">Global Stats</h2>
+      <div class="flex justify-around">
+        <div>
+          <span class="block text-3xl font-bold text-blue-600" id="total-books-read">0</span>
+          <span class="text-gray-600">Books Finished</span>
+        </div>
+        <div>
+          <span class="block text-3xl font-bold text-blue-600" id="total-pages-read">0</span>
+          <span class="text-gray-600">Total Pages Read</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-semibold mb-4">My Library</h2>
+    <div id="book-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      </div>
+
+  </div>
+
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>
